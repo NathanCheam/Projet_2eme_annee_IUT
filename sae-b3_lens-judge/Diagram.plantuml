@@ -1,0 +1,157 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AbsoluteValidator {
+  + AbsoluteValidator(): 
+  + valid(String, String): boolean
+}
+class AllLector {
+  + AllLector(): 
+  + apply(Judge, IValidator, TestCase, Process, BufferedReader): void
+}
+class App {
+  + App(): 
+  + main(String[]): void
+  - validateOptions(): void
+}
+class CProcess {
+  + CProcess(): 
+  + compile(Judge, File): File
+  + executeTest(Judge, File, TestCase, List<IContrainte>, IValidator): void
+}
+class CasseIgnoreValidator {
+  + CasseIgnoreValidator(IValidator): 
+  + valid(String, String): boolean
+}
+class CppProcess {
+  + CppProcess(): 
+  + compile(Judge, File): File
+  + executeTest(Judge, File, TestCase, List<IContrainte>, IValidator): void
+}
+class DecoValidator {
+  ~ DecoValidator(IValidator): 
+  + valid(String, String): boolean
+}
+class FileManager {
+  - FileManager(): 
+  + isExtension(File, String): boolean
+  + fileFromPath(String): File?
+  + getFileExtension(File): String
+}
+interface IContrainte << interface >> {
+  + run(Process): void
+}
+interface ILector << interface >> {
+  + apply(Judge, IValidator, TestCase, Process, BufferedReader): void
+}
+interface IProcess << interface >> {
+  + executeProcess(Judge, File, ProcessBuilder, TestCase, List<IContrainte>, IValidator): void
+  + compile(Judge, File): File
+  + execute(Judge, File, Problem): void
+  + executeTest(Judge, File, TestCase, List<IContrainte>, IValidator): void
+}
+interface IValidator << interface >> {
+  + valid(String, String): boolean
+}
+class JavaProcess {
+  + JavaProcess(): 
+  + executeTest(Judge, File, TestCase, List<IContrainte>, IValidator): void
+  + compile(Judge, File): File
+}
+class Judge {
+  + Judge(File, File): 
+  - listeJudgeValidator: List<IValidator>
+  - lector: ILector
+  - inProg: File
+  - inTests: File
+  - problem: Problem
+  - validatorList: ArrayList<DecoValidator>
+  - result: Result
+  + removeConstraint(IContrainte): void
+  + addValidator(Class<T>): void
+  + run(): Result
+  + addConstraint(IContrainte): void
+  + genProcess(File): IProcess
+  + clearConstraints(): void
+   problem: Problem
+   lector: ILector
+   inTests: File
+   validatorList: List<DecoValidator>
+   listeJudgeValidator: List<IValidator>
+   inProg: File
+   result: Result
+}
+class LineLector {
+  + LineLector(): 
+  + apply(Judge, IValidator, TestCase, Process, BufferedReader): void
+}
+class MemoryLimit {
+  + MemoryLimit(): 
+  + run(Process): void
+}
+class OneLector {
+  + OneLector(): 
+  + apply(Judge, IValidator, TestCase, Process, BufferedReader): void
+}
+class Problem {
+  # Problem(): 
+  - validator: IValidator
+  - testCases: ArrayList<TestCase>
+  - contraintes: ArrayList<IContrainte>
+   testCases: List<TestCase>
+   validator: IValidator
+   contraintes: List<IContrainte>
+}
+class ProblemBuilder {
+  + ProblemBuilder(): 
+  - problem: Problem
+  + build(): Problem
+  ~ searchInFile(File): ArrayList<TestCase>
+  + addContrainte(IContrainte): void
+  + addValidator(Class<T>): void
+  + addTestCase(File): void
+   problem: Problem
+}
+class PythonProcess {
+  + PythonProcess(): 
+  + executeTest(Judge, File, TestCase, List<IContrainte>, IValidator): void
+  + compile(Judge, File): File
+}
+class Result {
+  + Result(boolean, String): 
+  + merge(Result, Result): Result
+  + toString(): String
+}
+class SpaceIgnoreValidator {
+  + SpaceIgnoreValidator(IValidator): 
+  + valid(String, String): boolean
+}
+class TestCase {
+  + TestCase(File, File): 
+  - ans: File
+  - in: File
+   in: File
+   ans: File
+}
+class TimeLimit {
+  + TimeLimit(long): 
+  + run(Process): void
+}
+
+AbsoluteValidator     -[#008200,dashed]-^  IValidator           
+AllLector             -[#008200,dashed]-^  ILector              
+CProcess              -[#008200,dashed]-^  IProcess             
+CasseIgnoreValidator  -[#000082,plain]-^  DecoValidator        
+CppProcess            -[#008200,dashed]-^  IProcess             
+DecoValidator         -[#008200,dashed]-^  IValidator           
+JavaProcess           -[#008200,dashed]-^  IProcess             
+LineLector            -[#008200,dashed]-^  ILector              
+MemoryLimit           -[#008200,dashed]-^  IContrainte          
+OneLector             -[#008200,dashed]-^  ILector              
+PythonProcess         -[#008200,dashed]-^  IProcess             
+SpaceIgnoreValidator  -[#000082,plain]-^  DecoValidator        
+TimeLimit             -[#008200,dashed]-^  IContrainte          
+@enduml
